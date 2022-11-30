@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node</title>
+
+    <script src="https://kit.fontawesome.com/08c3f952c9.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        /*@import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');*/
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap');
+        body{
+            margin:0;
+            padding:0;
+            border:0;
+            font-family: 'Quicksand', sans-serif;
+            width:100%;
+            height:100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <br>
+        <div class="card" style="width:auto;">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-8">
+                        <%=username%>
+                    </div>
+                    <div class="col-4" style="text-align:end">
+                        <form method="POST">
+                        <button name="logout" type="submit" class="btn btn-link">LogOut</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="card" style="background-image: linear-gradient(90deg,#6085ff, #adabff);border:0;box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
+            <div class="card-body">
+                <h3 class="card-title" id="biometricTitle" style="color:white;"><script>const date = new Date();let day = date.getDate();let month = date.getMonth() + 1;let year = date.getFullYear();let currentDate = `${day}-${month}-${year}`;document.getElementById("biometricTitle").innerHTML = "Your BioMetric ("+currentDate+")"</script></h3>
+                <h6 class="card-subtitle mb-2 text-muted"></h6><br>
+                <div class="row">
+                    <div class="col-4 d-flex align-items-center justify-content-center">
+                        <div class="d-flex align-items-center justify-content-center" style="background-color:white;border-radius:20px;border:0;width:100px;height:100px;">
+                            <i style="font-size:80px; background: -webkit-linear-gradient(#adabff, #6085ff);-webkit-background-clip: text;-webkit-text-fill-color: transparent;" class="fa-solid fa-fingerprint"></i>
+                        </div>
+                    </div>
+                    <div class="col-8" style="text-align: center;">
+                        <table class="table table-borderless">
+                            <tbody>
+                                <tr>
+                                    <td style="text-align:end;"><%if(biometric[0]){%> <i style="color:white" class="fa-solid fa-check"></i> <%}else{%> <i style="color:#39509e" class="fa-solid fa-xmark"></i> <%}%></td>
+                                    <td style="text-align:start;color:white"> Morning </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:end;"> <%if(biometric[1]){%> <i style="color:white" class="fa-solid fa-check"></i> <%}else{%> <i style="color:#39509e" class="fa-solid fa-xmark"></i> <%}%> </td>
+                                    <td style="text-align:start;color:white"> Afternoon </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="border border-primary border-2 opacity-75">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Your ExamDuty</h5>
+                <h6 class="card-subtitle mb-2 text-muted">ExamDuty Will Be Listed Here</h6>
+                <div class="card">
+                    <img src="Userbackdrop.jpg" class="card-img-top" alt="...">
+                    <div class="card-body">
+                    <h5 class="card-title">Today</h5>
+                    <table class="table caption-top">
+                        <thead>
+                            <tr>
+                            <th scope="col">Exam Title</th>
+                            <th scope="col">Exam Time</th>
+                            <th scope="col">Exam Hall</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <%let nowTodayFlag = 0;for(var k = 0; k < allotments.length; k++){%>
+                            <%for(var l = 0; l < exams.length; l++){%>
+                            <%if(allotments[k]["exam_id"] == exams[l]["exam_id"]){%>
+                                <tr>
+                                    <td><%=exams[l]["exam_title"]%></td>
+                                    <td><%if(exams[l]["exam_time"] == 0){%>Morning<%}else{%>Afternoon<%}%></td>
+                                    <td><%=allotments[k]["hall_name"]%></td>
+                                </tr>
+                            <%nowTodayFlag = 1;}%>
+                            <%}%>
+                        <%}%>
+
+                        <%let todayFlag = 0;const date = new Date();let day = date.getDate();let staffs = [];let flag = 0;for(var i = 0;i < exams.length;i++){%>
+                        <%staffs = exams[i]["staffs"].split(',');flag=0;for(var j = 0; j < staffs.length; j++){ if(parseInt(staffs[j]) == userid){flag = 1;break;}}%>
+                        <%if(flag == 1 && day == parseInt(exams[i]["exam_date"].slice(8,10)) ){%>
+                                  <tr>
+                                    <td><%=exams[i]["exam_title"]%></td>
+                                    <td><%if(exams[i]["exam_time"] == 0){%>Morning<%}else{%>Afternoon<%}%></td>
+                                    <td> ❌ </td>
+                                  </tr>
+                        <%todayFlag = 1}%>
+                    <%}staffs=[];flag=0;if(todayFlag==0 && nowTodayFlag == 0){%>
+                        <tr>
+                            <td> </td>
+                            <td style="text-align:center"> - </td>
+                            <td> </td>
+                        </tr>
+                        <p class="card-text">No ExamDuty For You Today</p>
+                    <%}%>
+                        </tbody>
+                    </table>
+                    </div>
+                    <%let rendered = false;function upcoming(){if(rendered) return;%>
+                    <h5 class="card-title" style="text-align:center;">Your Upcoming ExamDuty</h5>
+                    <%rendered=true;}%>
+                    <ul class="list-group list-group-flush">
+                    <%for(var i = 0;i < exams.length;i++){%>
+                        <%staffs = exams[i]["staffs"].split(',');flag=0;for(var j = 0; j < staffs.length; j++){ if(parseInt(staffs[j]) == userid){flag = 1;break;}}%>
+                        <%if(flag == 1 && day != parseInt(exams[i]["exam_date"].slice(8,10)) && date < new Date(exams[i]["exam_date"]) ){upcoming();%>
+                            <li class="list-group-item"> <span class="badge text-bg-primary"><%=exams[i]["exam_title"]%></span> <span class="badge text-bg-success"><%=exams[i]["exam_date"]%></span> <span class="badge text-bg-info"><%if(exams[i]["exam_time"] == 0){%>Morning<%}else{%>Afternoon<%}%></span> </li>
+                        <%}%>
+                    <%}%>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
